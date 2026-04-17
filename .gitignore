@@ -1,0 +1,30 @@
+# Dependency directories
+node_modules/
+bower_components/
+jspm_packages/
+client/dist/
+
+# Python virtual environments
+venv/
+.venv/
+env/
+ENV/
+**/venv/
+**/.venv/
+**/env/
+**/ENV/
+Behvaior Analysis/banalysis/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# ML artifacts and model binaries
+*.joblib
+*.h5
+Behvaior Analysis/artifacts/
+Behvaior Analysis/ml_project/artifacts/
+Behvaior Analysis/artifacts/best_model.joblib
+Behvaior Analysis/ml_project/artifacts/best_model.joblib
+
+
