@@ -1,8 +1,15 @@
 const resolveApiBaseUrl = () => {
-  const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+  const configuredBaseUrl = import.meta.env.VITE_API_URL?.trim();
 
   if (configuredBaseUrl) {
-    return configuredBaseUrl;
+    // Ensure /api/v1 is appended if not already present
+    if (configuredBaseUrl.endsWith('/api/v1')) {
+      return configuredBaseUrl;
+    }
+    if (configuredBaseUrl.endsWith('/')) {
+      return `${configuredBaseUrl}api/v1`;
+    }
+    return `${configuredBaseUrl}/api/v1`;
   }
 
   if (typeof window !== "undefined") {
