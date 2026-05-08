@@ -170,9 +170,76 @@ const downloadReportRequest = async (token) => {
   return response.blob();
 };
 
+const buildQueryString = (params = {}) => {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      searchParams.set(key, value);
+    }
+  });
+
+  const queryString = searchParams.toString();
+  return queryString ? `?${queryString}` : "";
+};
+
+const getAdminStudentsRequest = (token, params) =>
+  request(`/admin/students${buildQueryString(params)}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+const getAdminStudentDetailsRequest = (token, userId) =>
+  request(`/admin/students/${userId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+const getAdminStatsRequest = (token) =>
+  request("/admin/stats", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+const getAdminLeaderboardRequest = (token, params) =>
+  request(`/admin/leaderboard${buildQueryString(params)}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+const deleteAdminSubmissionRequest = (token, submissionId) =>
+  request(`/admin/submissions/${submissionId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+const updateAdminUserBlockRequest = (token, userId, isBlocked) =>
+  request(`/admin/users/${userId}/block`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ isBlocked }),
+  });
+
 export {
   analyzeScoresRequest,
+  deleteAdminSubmissionRequest,
   downloadReportRequest,
+  getAdminLeaderboardRequest,
+  getAdminStatsRequest,
+  getAdminStudentDetailsRequest,
+  getAdminStudentsRequest,
   getQuestionsRequest,
   getRecommendationsRequest,
   getStudentProfileRequest,
@@ -180,4 +247,5 @@ export {
   registerRequest,
   saveStudentProfileRequest,
   submitScoresRequest,
+  updateAdminUserBlockRequest,
 };

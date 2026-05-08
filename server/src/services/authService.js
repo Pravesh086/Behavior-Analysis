@@ -7,6 +7,8 @@ import { AppError } from "../utils/http.js";
 const sanitizeUser = (user) => ({
   id: user._id.toString(),
   username: user.username,
+  role: user.role || "student",
+  isBlocked: Boolean(user.isBlocked),
 });
 
 const registerUser = async ({ username, password }) => {
@@ -25,9 +27,10 @@ const registerUser = async ({ username, password }) => {
   const user = await User.create({
     username: normalizedUsername,
     password: hashedPassword,
+    role: "student",
   });
 
-  const token = createToken({ id: user._id.toString(), username: user.username });
+  const token = createToken({ id: user._id.toString(), username: user.username, role: user.role || "student" });
 
   return {
     token,
@@ -47,13 +50,17 @@ const loginUser = async ({ username, password }) => {
     throw new AppError("Invalid username or password.", 401);
   }
 
+  if (user.isBlocked) {
+    throw new AppError("This account has been suspended.", 403);
+  }
+
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
     throw new AppError("Invalid username or password.", 401);
   }
 
-  const token = createToken({ id: user._id.toString(), username: user.username });
+  const token = createToken({ id: user._id.toString(), username: user.username, role: user.role || "student" });
 
   return {
     token,

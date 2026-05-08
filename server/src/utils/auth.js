@@ -38,18 +38,35 @@ const requireAuth = async (request, _response, next) => {
 
   const token = authHeader.slice(7);
   const payload = verifyToken(token);
-  const user = await User.findById(payload.id).select("_id username");
+  const user = await User.findById(payload.id).select("_id username role isBlocked");
 
   if (!user) {
     throw new AppError("Authenticated user not found.", 401);
   }
 
+  if (user.isBlocked) {
+    throw new AppError("This account has been suspended.", 403);
+  }
+
   request.user = {
     id: user._id.toString(),
     username: user.username,
+    role: user.role || "student",
   };
 
   next();
 };
 
-export { createToken, requireAuth, verifyToken };
+const requireRole = (...allowedRoles) => (request, _response, next) => {
+  if (!request.user) {
+    throw new AppError("Authentication is required.", 401);
+  }
+
+  if (!allowedRoles.includes(request.user.role)) {
+    throw new AppError("You do not have permission to access this resource.", 403);
+  }
+
+  next();
+};
+
+export { createToken, requireAuth, requireRole, verifyToken };

@@ -30,7 +30,7 @@ const LoginPage = () => {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const redirectPath = location.state?.from || "/student/profile";
+  const redirectPath = location.state?.from || "";
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -56,8 +56,8 @@ const LoginPage = () => {
 
     try {
       setIsSubmitting(true);
-      await login(form);
-      navigate(redirectPath, { replace: true });
+      const data = await login(form);
+      navigate(redirectPath || (data.user?.role === "admin" ? "/admin" : "/student/profile"), { replace: true });
     } catch (error) {
       setSubmitError(error.message);
     } finally {

@@ -34,15 +34,23 @@ const AppLayout = () => {
               </NavLink>
               {isAuthenticated ? (
                 <>
-                  <NavLink to="/questions" className={linkClassName}>
-                    Questions
-                  </NavLink>
-                  <NavLink to="/results" className={linkClassName}>
-                    Results
-                  </NavLink>
-                  <NavLink to="/student/profile" className={linkClassName}>
-                    Profile
-                  </NavLink>
+                  {user?.role === "admin" ? (
+                    <NavLink to="/admin" className={linkClassName}>
+                      Admin
+                    </NavLink>
+                  ) : (
+                    <>
+                      <NavLink to="/questions" className={linkClassName}>
+                        Questions
+                      </NavLink>
+                      <NavLink to="/results" className={linkClassName}>
+                        Results
+                      </NavLink>
+                      <NavLink to="/student/profile" className={linkClassName}>
+                        Profile
+                      </NavLink>
+                    </>
+                  )}
                 </>
               ) : (
                 <>

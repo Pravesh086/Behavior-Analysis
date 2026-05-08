@@ -15,6 +15,17 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    role: {
+      type: String,
+      enum: ["student", "admin"],
+      default: "student",
+      index: true,
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
   },
   {
     timestamps: true,
